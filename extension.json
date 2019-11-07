@@ -1,0 +1,8 @@
+{
+  "id": "csv-to-json-extension",
+  "name": "csv-to-json-extension",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Object"
+  ]
+}
