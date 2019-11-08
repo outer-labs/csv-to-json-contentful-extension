@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/forma-36-react-components';
 import { init, FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -65,22 +64,22 @@ export class App extends React.Component<AppProps, AppState> {
           }} ></input>
 
         {tableRows &&
-          <Table>
-            <TableHead>
-              <TableRow>
+          <table className="Table" cellPadding="0" cellSpacing="0">
+            <thead className="TableHead">
+              <tr className="TableRow">
                 {tableRows && tableRows.length > 0 && tableRows[0].map(cell =>
-                  <TableCell key={cell}>{cell}</TableCell>
+                  <td className="TableCell" key={cell}>{cell}</td>
                 )}
-              </TableRow>
-            </TableHead>
-            <TableBody>{tableRows && tableRows.length > 1 && tableRows.slice(1).map((row, i) =>
-              <TableRow key={`row${i}`}>
+              </tr>
+            </thead>
+            <tbody className="TableBody">{tableRows && tableRows.length > 1 && tableRows.slice(1).map((row, i) =>
+              <tr className="TableRow" key={`row${i}`}>
                 {row && row.map((cell, j) =>
-                  <TableCell key={`${cell}-${j}`}>{cell}</TableCell>
+                  <td className="TableCell" key={`${cell}-${j}`}>{cell}</td>
                 )}
-              </TableRow>
-            )}</TableBody>
-          </Table>
+              </tr>
+            )}</tbody>
+          </table>
           }
       </div>
     );
