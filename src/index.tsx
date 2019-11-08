@@ -4,11 +4,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/fo
 import { init, FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
-
 const parse = require('csv-parse')
-const example = `Manufacturer,Coating,U-Value,VLT
-SHGC 0.21 - 0.25,,.9,
-Glastroesch,Superselekt 60/27T,0.23,0.59`;
 
 interface AppProps {
   sdk: FieldExtensionSDK;
@@ -28,7 +24,6 @@ export class App extends React.Component<AppProps, AppState> {
 
   componentDidMount() {
     this.props.sdk.window.startAutoResizer();
-    this.parseValue(example);
   }
 
   parseValue(value: string) {
@@ -39,34 +34,55 @@ export class App extends React.Component<AppProps, AppState> {
       if (err) {
         console.error(err.message);
       }
+
       this.setState({ value: output })
+
+      this.props.sdk.field.setValue(output)
+        .catch(err => {
+          console.log(err)
+        });
     })
   }
 
+  readFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files && e.currentTarget.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (evt : any) => {
+        this.parseValue(evt.target && evt.target.result);
+      }
+    }
+  };
+
   render = () => {
     const tableRows = this.state.value;
-    console.log(tableRows);
-    if (!tableRows || tableRows.length === 0) {
-      return null;
-    }
-    return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            {tableRows && tableRows.length > 0 && tableRows[0].map(cell =>
-              <TableCell key={cell}>{cell}</TableCell>
-            )}
-          </TableRow>
-        </TableHead>
-        <TableBody>{tableRows && tableRows.length > 1 && tableRows.slice(1).map((row, i) =>
-          <TableRow key={`row${i}`}>
-            {row && row.map((cell, j) =>
-              <TableCell key={`${cell}-${j}`}>{cell}</TableCell>
-            )}
-          </TableRow>
-        )}</TableBody>
-    </Table>
 
+    return (
+      <div>
+        <input className="fileInput" type="file" accept=".csv" onChange={event=> {
+               this.readFile(event)
+          }} ></input>
+
+        {tableRows &&
+          <Table>
+            <TableHead>
+              <TableRow>
+                {tableRows && tableRows.length > 0 && tableRows[0].map(cell =>
+                  <TableCell key={cell}>{cell}</TableCell>
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>{tableRows && tableRows.length > 1 && tableRows.slice(1).map((row, i) =>
+              <TableRow key={`row${i}`}>
+                {row && row.map((cell, j) =>
+                  <TableCell key={`${cell}-${j}`}>{cell}</TableCell>
+                )}
+              </TableRow>
+            )}</TableBody>
+          </Table>
+          }
+      </div>
     );
   };
 }
