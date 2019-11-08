@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { TextInput, Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/forma-36-react-components';
+import { Table, TableHead, TableBody, TableRow, TableCell } from '@contentful/forma-36-react-components';
 import { init, FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -26,21 +26,10 @@ export class App extends React.Component<AppProps, AppState> {
     };
   }
 
-  // detachExternalChangeHandler: Function | null = null;
-
   componentDidMount() {
     this.props.sdk.window.startAutoResizer();
-
-    // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
-    // this.detachExternalChangeHandler = this.props.sdk.field.onValueChanged(this.onExternalChange);
     this.parseValue(example);
   }
-
-  // componentWillUnmount() {
-  //   if (this.detachExternalChangeHandler) {
-  //     this.detachExternalChangeHandler();
-  //   }
-  // }
 
   parseValue(value: string) {
     parse(value, {
@@ -53,21 +42,6 @@ export class App extends React.Component<AppProps, AppState> {
       this.setState({ value: output })
     })
   }
-
-  // onExternalChange = (value: string) => {
-  //   this.setState({ value });
-  // };
-
-  // onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.currentTarget.value;
-
-  //   this.setState({ value });
-  //   if (value) {
-  //     await this.props.sdk.field.setValue(value);
-  //   } else {
-  //     await this.props.sdk.field.removeValue();
-  //   }
-  // };
 
   render = () => {
     const tableRows = this.state.value;
